@@ -1,11 +1,15 @@
-from sqlalchemy import Column,Integer,String
-from db.base import Base
+from pydantic import BaseModel,EmailStr
 
-#Base is required because it registers all ORM models with SQLAlchemy, allowing it to track table metadata and manage database mappings
+class UserBase(BaseModel):
+    username:str
+    email:EmailStr
 
-class user(Base):
-    __tablename__="users"
+class UserCreate(UserBase):
+    pass # This inherits username and email from UserBase
 
-    id=Column(Integer,primary_key=True,index=True)
-    username = Column(String(50), unique=True, index=True, nullable=False)
-    email = Column(String(100), unique=True, index=True, nullable=False)
+class UserRead(UserBase):
+    id: int
+
+    class Config:
+        from_attributes = True
+
